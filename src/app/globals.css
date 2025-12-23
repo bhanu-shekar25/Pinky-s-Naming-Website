@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Pastel Palette */
+  --cream: #FFF9F5;
+  --pink-soft: #FFB7B2;
+  --pink-deep: #FF9E99;
+  --peach: #FFDAC1;
+  --lavender: #E0BBE4;
+  --foreground: #4A403A;
+  --gold: #FFD700;
+  --silver: #C0C0C0;
+  --bronze: #CD7F32;
+  
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-quicksand);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-cream: var(--cream);
+  --color-pink-soft: var(--pink-soft);
+  --color-pink-deep: var(--pink-deep);
+  --color-peach: var(--peach);
+  --color-lavender: var(--lavender);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-gold: var(--gold);
+  --color-silver: var(--silver);
+  --color-bronze: var(--bronze);
+  
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
 }
 
 body {
-  background: var(--background);
+  background: var(--cream);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Custom Utilities */
+.text-serif {
+  font-family: var(--font-serif);
+}
+
+/* Soft Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pink-soft);
+  border-radius: 4px;
 }

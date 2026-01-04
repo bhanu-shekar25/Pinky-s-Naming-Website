@@ -1,7 +1,5 @@
 "use server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 export interface SuggestedName {
     name: string;
     meaning: string;
@@ -9,17 +7,13 @@ export interface SuggestedName {
 }
 
 export async function getBabyNameSuggestions(excludeNames: string[] = [], mode: "all" | "lv" = "all"): Promise<SuggestedName[]> {
-    const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
-        throw new Error("Gemini API key is missing. Please add GEMINI_API_KEY to your .env.local file. If you just added it, you might need to restart 'npm run dev'.");
+        throw new Error("Groq API key is missing. Please add GROQ_API_KEY to your .env.local file. If you just added it, you might need to restart 'npm run dev'.");
     }
 
     try {
-        const genAI = new GoogleGenerativeAI(apiKey);
-        // Using gemini-2.5-flash-lite as explicitly requested by user
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
-
         const lvConstraint = mode === "lv"
             ? "MUST start with 'L' or 'V'."
             : "Any letter.";
@@ -32,18 +26,41 @@ Style: Modern & Meaningful.
 Limit: Keep "meaning" and "reason" under 8 words each for speed.
 No preamble, no markdown, no thinking tokens. Just the JSON.`;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                model: "llama-3.3-70b-versatile",
+                messages: [
+                    {
+                        role: "user",
+                        content: prompt
+                    }
+                ],
+                temperature: 0.7,
+                max_tokens: 2000,
+            }),
+        });
 
-        // Clean the text in case Gemini includes markdown code blocks
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`Groq API error: ${response.status} - ${errorData.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        const text = data.choices?.[0]?.message?.content || "";
+
+        // Clean the text in case the model includes markdown code blocks
         const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
         try {
             const suggestions = JSON.parse(cleanedText);
             return suggestions;
         } catch (parseError) {
-            console.error("Failed to parse Gemini response as JSON:", text);
+            console.error("Failed to parse Groq response as JSON:", text);
             // Fallback: try to find anything that looks like a JSON array
             const match = text.match(/\[\s*\{[\s\S]*\}\s*\]/);
             if (match) {
@@ -52,16 +69,16 @@ No preamble, no markdown, no thinking tokens. Just the JSON.`;
             throw new Error("Failed to parse suggestions from AI response.");
         }
     } catch (error: any) {
-        console.error("Error calling Gemini API:", error);
+        console.error("Error calling Groq API:", error);
 
         let errorMessage = "AI Suggestion service is temporarily unavailable.";
         if (error.message?.includes("403")) {
-            errorMessage = "Google AI access denied (403). Please verify your API key is allowed to use the 'Generative Language API' in Google Cloud Console and that billing/quota is active.";
+            errorMessage = "Groq API access denied (403). Please verify your API key is valid.";
         } else if (error.message?.includes("429")) {
             errorMessage = "We've run out of magic dust (rate limit)! Please wait a minute and try again.";
         } else if (error.message?.includes("404")) {
             errorMessage = "The selected AI model was not found. Please try a different model version.";
-        } else if (error.message?.includes("API key not found") || error.message?.includes("invalid API key")) {
+        } else if (error.message?.includes("API key") || error.message?.includes("invalid")) {
             errorMessage = "The provided API key is invalid. Please check your .env.local file.";
         }
 

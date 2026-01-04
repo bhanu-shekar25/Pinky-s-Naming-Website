@@ -7,11 +7,14 @@ import { NameList } from "@/components/features/NameList";
 import { Podium } from "@/components/features/Podium";
 import { useNames } from "@/lib/hooks/useNames";
 import { Sparkles } from "lucide-react";
+import { UserActivityModal } from "@/components/features/UserActivityModal";
+import { NameSuggestions } from "@/components/features/NameSuggestions";
+import { useState } from "react";
 
 export default function Home() {
-  const { names, loading, votedIds, addName, voteName } = useNames();
+  const { names, loading, votedIds, submittedIds, addName, voteName } = useNames();
+  const [isActivityOpen, setIsActivityOpen] = useState(false);
 
-  // Get top 3 for podium
   // Get top 3 for podium
   const topNames = [...names]
     .sort((a, b) => {
@@ -26,7 +29,6 @@ export default function Home() {
       if (b.votes !== a.votes) return b.votes - a.votes;
 
       // 3. Creation Time (Ascending - Older is better)
-      // Note: Assuming createdAt is available, if not fallback to 0
       const timeA = a.createdAt ? (typeof a.createdAt === 'number' ? a.createdAt : 0) : 0;
       const timeB = b.createdAt ? (typeof b.createdAt === 'number' ? b.createdAt : 0) : 0;
       return timeA - timeB;
@@ -50,16 +52,20 @@ export default function Home() {
 
         {/* Podium - Only show if we have votes */}
         {topNames.length > 0 && (
-          <section className="width-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <section className="width-full animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-10">
             <Podium topNames={topNames} />
           </section>
         )}
 
-        <section className="w-full mb-4 mt-1 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
+        <section className="w-full mb-2 md:mb-4 mt-6 animate-in fade-in slide-in-from-bottom-8 duration-700 relative z-40">
+          <NameSuggestions onAddName={addName} existingNames={names} />
+        </section>
+
+        <section className="w-full mb-4 mt-1 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 relative z-30">
           <NameSubmission onSubmit={addName} />
         </section>
 
-        <section className="w-full animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+        <section className="w-full animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 relative z-20">
           <div className="flex items-center justify-center gap-2 mb-1 opacity-50">
             <span className="h-px w-12 bg-foreground/20"></span>
             <Sparkles className="w-4 h-4" />
@@ -70,11 +76,26 @@ export default function Home() {
               Loading names...
             </div>
           ) : (
-            <NameList names={names} votedIds={votedIds} onVote={voteName} />
+            <NameList
+              names={names}
+              votedIds={votedIds}
+              submittedIds={submittedIds}
+              onVote={voteName}
+              onOpenActivity={() => setIsActivityOpen(true)}
+            />
           )}
         </section>
 
       </main>
+
+      <UserActivityModal
+        isOpen={isActivityOpen}
+        onClose={() => setIsActivityOpen(false)}
+        names={names}
+        votedIds={votedIds}
+        submittedIds={submittedIds}
+        onVote={voteName}
+      />
 
       <Footer />
     </div>

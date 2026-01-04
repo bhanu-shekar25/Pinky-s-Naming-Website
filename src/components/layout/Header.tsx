@@ -2,10 +2,18 @@
 
 import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { UserSelector } from "@/components/features/UserSelector";
 
 export function Header() {
     return (
         <header className="flex flex-col items-center w-full">
+            {/* Top Bar for User Selector */}
+            <div className="w-full bg-white/40 backdrop-blur-md border-b border-gray-100/50 z-[110]">
+                <div className="max-w-4xl mx-auto w-full flex justify-end px-4 py-2">
+                    <UserSelector />
+                </div>
+            </div>
+
             {/* Family Notice Banner */}
             <div className="w-full bg-lavender/30 text-foreground py-3 px-4 text-center border-b border-lavender/50">
                 <p className="text-sm md:text-base font-medium flex items-center justify-center gap-2">

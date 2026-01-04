@@ -5,6 +5,7 @@ export interface Name {
     meaning?: string;
     votes: number;
     createdAt: number; // Timestamp
+    addedBy: string;
 }
 
 export interface NameSubmission {

@@ -23,6 +23,8 @@ export const viewport = {
   maximumScale: 1,
 };
 
+import { Providers } from "@/components/Providers";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,7 +35,9 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${quicksand.variable} antialiased bg-cream text-foreground font-sans`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

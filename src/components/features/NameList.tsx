@@ -1,21 +1,23 @@
+"use client";
+
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDownWideNarrow, Clock, Quote, Search, ArrowDown, ListOrdered } from "lucide-react";
+import { ArrowDownWideNarrow, Clock, Quote, Search, ArrowDown, User } from "lucide-react";
 import { Name, SortOption } from "@/lib/types";
 import { NameCard } from "./NameCard";
-import { NewNamesModal } from "./NewNamesModal";
 
 interface NameListProps {
     names: Name[];
     votedIds: string[];
+    submittedIds: string[];
     onVote: (id: string) => void;
+    onOpenActivity: () => void;
 }
 
-export function NameList({ names, votedIds, onVote }: NameListProps) {
+export function NameList({ names, votedIds, submittedIds, onVote, onOpenActivity }: NameListProps) {
     const [sortBy, setSortBy] = useState<SortOption>("most-voted");
     const [searchQuery, setSearchQuery] = useState("");
     const [visibleCount, setVisibleCount] = useState(12);
-    const [showTimeline, setShowTimeline] = useState(false);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -79,14 +81,14 @@ export function NameList({ names, votedIds, onVote }: NameListProps) {
                     </div>
 
                     <button
-                        onClick={() => setShowTimeline(true)}
+                        onClick={onOpenActivity}
                         className="p-2.5 bg-white/80 backdrop-blur-sm border border-pink-100 rounded-full shadow-sm 
                                  hover:bg-white hover:text-pink-deep hover:border-pink-200 hover:shadow-md transition-all
                                  text-foreground/60"
-                        title="View Timeline"
-                        aria-label="View New Names Timeline"
+                        title="Your Activity"
+                        aria-label="View Your Activity Tracker"
                     >
-                        <ListOrdered className="w-5 h-5" />
+                        <User className="w-5 h-5" />
                     </button>
                 </div>
 
@@ -168,14 +170,6 @@ export function NameList({ names, votedIds, onVote }: NameListProps) {
                     </div>
                 )}
             </div>
-
-            <NewNamesModal
-                isOpen={showTimeline}
-                onClose={() => setShowTimeline(false)}
-                names={names}
-                votedIds={votedIds}
-                onVote={onVote}
-            />
         </div>
     );
 }

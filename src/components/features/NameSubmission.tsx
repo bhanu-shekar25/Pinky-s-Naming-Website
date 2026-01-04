@@ -6,13 +6,15 @@ import { Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useUser } from "@/lib/context/UserContext";
 
 interface NameSubmissionProps {
-    onSubmit: (name: string, meaning: string) => Promise<void>;
+    onSubmit: (name: string, meaning: string, addedBy: string) => Promise<void>;
     isSubmitting?: boolean;
 }
 
 export function NameSubmission({ onSubmit }: NameSubmissionProps) {
+    const { currentUser } = useUser();
     const [name, setName] = useState("");
     const [meaning, setMeaning] = useState("");
     const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -20,13 +22,13 @@ export function NameSubmission({ onSubmit }: NameSubmissionProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name.trim()) return;
+        if (!name.trim() || !currentUser) return;
 
         setStatus("submitting");
         setErrorMsg("");
 
         try {
-            await onSubmit(name, meaning);
+            await onSubmit(name, meaning, currentUser);
             setStatus("success");
 
             // Trigger confetti
@@ -51,7 +53,9 @@ export function NameSubmission({ onSubmit }: NameSubmissionProps) {
 
     return (
         <div className="w-full max-w-md mx-auto p-4">
-            <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/60">
+            <div className="bg-white rounded-3xl p-6 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1),0_20px_50px_-10px_rgba(0,0,0,0.2)] border border-pink-100/50 relative overflow-hidden group">
+                {/* Inner Glow/Border hint */}
+                <div className="absolute inset-0 border-[3px] border-white/50 rounded-3xl pointer-events-none" />
                 <h2 className="text-2xl font-serif text-center mb-6 text-pink-deep">
                     Suggest a Name
                 </h2>
@@ -64,6 +68,7 @@ export function NameSubmission({ onSubmit }: NameSubmissionProps) {
                         onChange={(e) => setName(e.target.value)}
                         required
                         maxLength={30}
+                        disabled={!currentUser}
                     />
 
                     <Input
@@ -72,14 +77,23 @@ export function NameSubmission({ onSubmit }: NameSubmissionProps) {
                         value={meaning}
                         onChange={(e) => setMeaning(e.target.value)}
                         maxLength={100}
+                        disabled={!currentUser}
                     />
+
+                    {!currentUser && (
+                        <div className="bg-pink-50/50 p-4 rounded-xl border border-pink-100 text-center">
+                            <p className="text-xs text-pink-deep font-medium italic">
+                                Please select your name at the top to suggest names! ✨
+                            </p>
+                        </div>
+                    )}
 
                     <Button
                         type="submit"
                         className="w-full mt-4 text-lg font-serif"
                         size="lg"
                         variant="primary"
-                        disabled={status === "submitting" || !name.trim()}
+                        disabled={status === "submitting" || !name.trim() || !currentUser}
                     >
                         {status === "submitting" ? (
                             <motion.div

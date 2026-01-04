@@ -33,16 +33,20 @@ export function NameCard({ nameData, onVote, hasVoted, rank }: NameCardProps) {
                             {nameData.meaning}
                         </p>
                     )}
+                    {nameData.addedBy && (
+                        <p className="text-xs text-foreground/40 mt-1 truncate">
+                            Added by <span className="font-medium text-foreground/60">{nameData.addedBy}</span>
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex flex-col items-center gap-1">
                     <Button
                         variant={hasVoted ? "secondary" : "primary"}
                         size="icon"
-                        onClick={() => !hasVoted && onVote(nameData.id)}
-                        disabled={hasVoted}
-                        className={`rounded-full shadow-md transition-transform ${hasVoted ? "opacity-70 cursor-default" : "hover:scale-110"}`}
-                        aria-label={`Vote for ${nameData.displayName}`}
+                        onClick={() => onVote(nameData.id)}
+                        className={`rounded-full shadow-md transition-transform ${hasVoted ? "hover:scale-105" : "hover:scale-110"}`}
+                        aria-label={hasVoted ? `Remove vote for ${nameData.displayName}` : `Vote for ${nameData.displayName}`}
                     >
                         <Heart
                             className={`w-5 h-5 transition-colors duration-300 ${hasVoted ? "fill-pink-deep text-pink-deep" : "fill-transparent"}`}

@@ -23,8 +23,10 @@ Constraint: ${lvConstraint}
 CRITICAL: DO NOT SUGGEST ANY OF THESE NAMES (Case-Insensitive): ${excludeNames.join(", ")}.
 Format: JSON array of objects: [{"name": "...", "meaning": "...", "reason": "..."}]
 Style: Modern & Meaningful.
-Limit: Keep "meaning" and "reason" under 8 words each for speed.
-No preamble, no markdown, no thinking tokens. Just the JSON.`;
+IMPORTANT: 
+- "meaning" should be a complete sentence explaining what the name means (10-15 words)
+- "reason" should be a complete sentence explaining why this name is special (10-15 words)
+No preamble, no markdown, no thinking tokens. Just the JSON array.`;
 
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",

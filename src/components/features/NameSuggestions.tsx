@@ -132,7 +132,7 @@ export function NameSuggestions({ onAddName, existingNames }: NameSuggestionsPro
 
     return (
         <div className="w-full max-w-md mx-auto p-4 mb-2 md:mb-6">
-            <div className="bg-white rounded-3xl p-5 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1),0_20px_50px_-10px_rgba(0,0,0,0.2)] border border-pink-100/50 relative overflow-hidden group/card">
+            <div className="bg-white rounded-3xl p-5 shadow-2xl border border-pink-100/50 relative overflow-hidden group/card">
                 {/* Inner Glow/Border hint */}
                 <div className="absolute inset-0 border-[3px] border-white/50 rounded-3xl pointer-events-none" />
                 {/* Subtle background glow */}

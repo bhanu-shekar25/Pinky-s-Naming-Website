@@ -52,7 +52,7 @@ export default function Home() {
 
         {/* Podium - Only show if we have votes */}
         {topNames.length > 0 && (
-          <section className="width-full animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-10">
+          <section className="w-full animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-10">
             <Podium topNames={topNames} />
           </section>
         )}

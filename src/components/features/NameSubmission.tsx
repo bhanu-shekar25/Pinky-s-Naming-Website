@@ -53,7 +53,7 @@ export function NameSubmission({ onSubmit }: NameSubmissionProps) {
 
     return (
         <div className="w-full max-w-md mx-auto p-4">
-            <div className="bg-white rounded-3xl p-6 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1),0_20px_50px_-10px_rgba(0,0,0,0.2)] border border-pink-100/50 relative overflow-hidden group">
+            <div className="bg-white rounded-3xl p-6 shadow-2xl border border-pink-100/50 relative overflow-hidden group">
                 {/* Inner Glow/Border hint */}
                 <div className="absolute inset-0 border-[3px] border-white/50 rounded-3xl pointer-events-none" />
                 <h2 className="text-2xl font-serif text-center mb-6 text-pink-deep">

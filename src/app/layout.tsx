@@ -12,6 +12,8 @@ const quicksand = Quicksand({
   subsets: ["latin"],
 });
 
+import { Providers } from "@/components/Providers";
+
 export const metadata: Metadata = {
   title: "Pinky's Name Picker",
   description: "Help us choose a beautiful name for baby Pinky!",
@@ -22,8 +24,6 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
 };
-
-import { Providers } from "@/components/Providers";
 
 export default function RootLayout({
   children,

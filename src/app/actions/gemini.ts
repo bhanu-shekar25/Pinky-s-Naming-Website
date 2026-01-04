@@ -9,15 +9,15 @@ export interface SuggestedName {
 }
 
 export async function getBabyNameSuggestions(excludeNames: string[] = [], mode: "all" | "lv" = "all"): Promise<SuggestedName[]> {
-    const apiKey = "AIzaSyA6bvdxwaaD4hG-A_IK5r6cRIKkB9a8Mak";
+    const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
     if (!apiKey) {
-        throw new Error("Gemini API key is missing.");
+        throw new Error("Gemini API key is missing. Please add GEMINI_API_KEY to your .env.local file. If you just added it, you might need to restart 'npm run dev'.");
     }
 
     try {
         const genAI = new GoogleGenerativeAI(apiKey);
-        // Using gemini-2.5-flash-lite for maximum speed as confirmed by manual check
+        // Using gemini-2.5-flash-lite as explicitly requested by user
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
         const lvConstraint = mode === "lv"
@@ -56,11 +56,13 @@ No preamble, no markdown, no thinking tokens. Just the JSON.`;
 
         let errorMessage = "AI Suggestion service is temporarily unavailable.";
         if (error.message?.includes("403")) {
-            errorMessage = "Google AI is not supported in your current location or the API key is restricted.";
+            errorMessage = "Google AI access denied (403). Please verify your API key is allowed to use the 'Generative Language API' in Google Cloud Console and that billing/quota is active.";
         } else if (error.message?.includes("429")) {
             errorMessage = "We've run out of magic dust (rate limit)! Please wait a minute and try again.";
         } else if (error.message?.includes("404")) {
-            errorMessage = "The AI model (Gemini 2.5 Flash) was not found. Please check your API settings.";
+            errorMessage = "The selected AI model was not found. Please try a different model version.";
+        } else if (error.message?.includes("API key not found") || error.message?.includes("invalid API key")) {
+            errorMessage = "The provided API key is invalid. Please check your .env.local file.";
         }
 
         throw new Error(errorMessage);

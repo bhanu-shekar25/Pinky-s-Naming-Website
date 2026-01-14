@@ -19,7 +19,7 @@ export function Header() {
                 <p className="text-sm md:text-base font-medium flex items-center justify-center gap-2">
                     <Sparkles className="w-4 h-4 text-purple-500" />
                     <span>
-                        Family Note: The priest has suggested the letters <strong className="text-purple-700">L</strong> and <strong className="text-purple-700">V</strong> for Pinky’s name.
+                        Family Note: The priest has suggested the letters <strong className="text-purple-700">H</strong>, <strong className="text-purple-700">K</strong>, <strong className="text-purple-700">L</strong>, <strong className="text-purple-700">M</strong>, <strong className="text-purple-700">N</strong>, <strong className="text-purple-700">R</strong>, <strong className="text-purple-700">S</strong>, and <strong className="text-purple-700">T</strong> for Pinky's name.
                     </span>
                     <Sparkles className="w-4 h-4 text-purple-500" />
                 </p>

@@ -6,7 +6,7 @@ export interface SuggestedName {
     reason: string;
 }
 
-export async function getBabyNameSuggestions(excludeNames: string[] = [], mode: "all" | "lv" = "all"): Promise<SuggestedName[]> {
+export async function getBabyNameSuggestions(excludeNames: string[] = [], mode: "all" | "letters" = "all"): Promise<SuggestedName[]> {
     const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
@@ -14,8 +14,8 @@ export async function getBabyNameSuggestions(excludeNames: string[] = [], mode: 
     }
 
     try {
-        const lvConstraint = mode === "lv"
-            ? "MUST start with 'L' or 'V'."
+        const lvConstraint = mode === "letters"
+            ? "MUST start with one of these letters: H, K, L, M, N, R, S, or T."
             : "Any letter.";
 
         const prompt = `Task: Suggest 10 modern Indian baby girl names.

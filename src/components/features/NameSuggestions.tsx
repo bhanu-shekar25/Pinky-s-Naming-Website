@@ -14,7 +14,7 @@ interface NameSuggestionsProps {
     existingNames: Name[];
 }
 
-type SuggestionMode = "all" | "lv";
+type SuggestionMode = "all" | "letters";
 
 export function NameSuggestions({ onAddName, existingNames }: NameSuggestionsProps) {
     const { currentUser } = useUser();
@@ -146,12 +146,12 @@ export function NameSuggestions({ onAddName, existingNames }: NameSuggestionsPro
 
                 <div className="flex flex-nowrap justify-center gap-2 md:gap-3 w-full">
                     <Button
-                        onClick={() => handleOpen("lv")}
+                        onClick={() => handleOpen("letters")}
                         variant="outline"
                         className="flex-1 group relative flex items-center justify-center gap-1.5 md:gap-2 rounded-2xl border-pink-soft/30 hover:border-pink-soft bg-white/60 backdrop-blur-sm px-2 py-4 overflow-hidden transition-all duration-300 hover:shadow-md"
                     >
                         <Heart className="w-3.5 h-3.5 text-pink-deep fill-pink-deep animate-pulse shrink-0" />
-                        <span className="font-serif font-bold text-pink-deep text-[11px] sm:text-xs md:text-sm whitespace-nowrap">L & V</span>
+                        <span className="font-serif font-bold text-pink-deep text-[11px] sm:text-xs md:text-sm whitespace-nowrap">H K L M N R S T</span>
                     </Button>
 
                     <Button
@@ -196,7 +196,7 @@ export function NameSuggestions({ onAddName, existingNames }: NameSuggestionsPro
                                     </div>
                                     <div className="space-y-2">
                                         <p className="font-serif text-2xl font-bold tracking-wide">
-                                            {mode === "lv" ? "Finding L & V Magic..." : "Gathering Baby Dust..."}
+                                            {mode === "letters" ? "Finding Special Letters..." : "Gathering Baby Dust..."}
                                         </p>
                                         <p className="text-pink-soft/80 text-sm animate-pulse">Consulting the constellation of names</p>
                                     </div>
@@ -234,7 +234,7 @@ export function NameSuggestions({ onAddName, existingNames }: NameSuggestionsPro
                                     <div className="space-y-3">
                                         <h3 className="font-serif text-3xl font-bold text-gray-800">Inspired?</h3>
                                         <p className="text-gray-500 leading-relaxed">
-                                            We've shown you our favorite {mode === "lv" ? "L & V" : ""} picks. Want more?
+                                            We've shown you our favorite {mode === "letters" ? "special letter" : ""} picks. Want more?
                                         </p>
                                     </div>
                                     <Button
@@ -292,9 +292,9 @@ function SuggestionCard({
         >
             <div className="w-full text-center space-y-6 flex-1 flex flex-col justify-center">
                 <div className="space-y-1">
-                    <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase ${mode === 'lv' ? 'bg-pink-50 text-pink-deep' : 'bg-peach/30 text-orange-600'}`}>
-                        {mode === 'lv' ? <Heart className="w-3 h-3 fill-current" /> : <Sparkles className="w-3 h-3" />}
-                        {mode === 'all' ? 'Discovery Mode' : 'L & V Collection'}
+                    <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase ${mode === 'letters' ? 'bg-pink-50 text-pink-deep' : 'bg-peach/30 text-orange-600'}`}>
+                        {mode === 'letters' ? <Heart className="w-3 h-3 fill-current" /> : <Sparkles className="w-3 h-3" />}
+                        {mode === 'all' ? 'Discovery Mode' : 'Special Letters'}
                     </div>
                 </div>
 

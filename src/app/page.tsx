@@ -18,9 +18,9 @@ export default function Home() {
   // Get top 3 for podium
   const topNames = [...names]
     .sort((a, b) => {
-      // 1. Priority: Names starting with L or V
-      const isPriorityA = /^[LV]/i.test(a.name);
-      const isPriorityB = /^[LV]/i.test(b.name);
+      // 1. Priority: Names starting with H, K, L, M, N, R, S, or T
+      const isPriorityA = /^[HKLMNRST]/i.test(a.name);
+      const isPriorityB = /^[HKLMNRST]/i.test(b.name);
 
       if (isPriorityA && !isPriorityB) return -1;
       if (!isPriorityA && isPriorityB) return 1;

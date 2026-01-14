@@ -18,15 +18,15 @@ export default function Home() {
   // Get top 3 for podium
   const topNames = [...names]
     .sort((a, b) => {
-      // 1. Priority: Names starting with H, K, L, M, N, R, S, or T
+      // 1. Vote Count (Descending) - Most important
+      if (b.votes !== a.votes) return b.votes - a.votes;
+
+      // 2. Priority: Names starting with H, K, L, M, N, R, S, or T (tiebreaker)
       const isPriorityA = /^[HKLMNRST]/i.test(a.name);
       const isPriorityB = /^[HKLMNRST]/i.test(b.name);
 
       if (isPriorityA && !isPriorityB) return -1;
       if (!isPriorityA && isPriorityB) return 1;
-
-      // 2. Vote Count (Descending)
-      if (b.votes !== a.votes) return b.votes - a.votes;
 
       // 3. Creation Time (Ascending - Older is better)
       const timeA = a.createdAt ? (typeof a.createdAt === 'number' ? a.createdAt : 0) : 0;
